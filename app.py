@@ -50,5 +50,13 @@ def delete_post():
     return {"result": "success"}
 
 
+@app.route('/post', methods=['FETCH'])
+def fetch_post():
+    idx = request.args.get('idx')
+    db.post.delete_one({'idx': int(idx)})
+    return {"result": "success"}
+
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

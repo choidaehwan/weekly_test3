@@ -50,6 +50,10 @@
             border: black solid;
             border-radius: 5px;
         }
+
+        .blue {
+            background-color: blue;
+        }
     </style>
     <script>
         $(document).ready(function () {
@@ -110,9 +114,10 @@
         function makeListPost(post, index) {
             let tempHtml = ` <tr>
                       <th scope="row">${index + 1}</th>
-                      <td>${post['title']}</td>
+                      <td><a>${post['title']}</a></td>
                       <td>${post['reg_date']}</button></td>
                       <td><button type="button" class="btn btn-danger"제 onclick="deleteArticle(${post['idx']})">삭제</button></td>
+                      <td><button type="button" class="btn blue btn-danger"제 onclick="fetchArticle(${post['idx']})">수정</button></td>
                       </tr>
                     `;
             $("#list-post").append(tempHtml);
@@ -125,6 +130,22 @@
                 success: function (response) { // 성공하면
                     if (response["result"] == "success") {
                         alert("삭제 성공!");
+                        // 3. 성공 시 페이지 새로고침하기
+                        window.location.reload();
+                    } else {
+                        alert("서버 오류!");
+                    }
+                }
+            })
+        }
+
+        function fetchArticle(idx) {
+            $.ajax({
+                type: "FETCH",
+                url: `/post?idx=${idx}`,
+                success: function (response) { // 성공하면
+                    if (response["result"] == "success") {
+                        alert("수정 성공!");
                         // 3. 성공 시 페이지 새로고침하기
                         window.location.reload();
                     } else {
@@ -163,10 +184,11 @@
     <table class="table">
               <thead>
                 <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">타이틀</th>
-                  <th scope="col">날짜</th>
-                  <th scope="col">삭제</th>
+                    <th scope="col">#</th>
+                    <th scope="col">타이틀</th>
+                    <th scope="col">날짜</th>
+                    <th scope="col">삭제</th>
+                    <th scope="col">수정</th>
                 </tr>
               </thead>
               <tbody id="list-post">
